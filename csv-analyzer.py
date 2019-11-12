@@ -3,6 +3,7 @@ import csv
 DELIMITER = ";"
 FILE = "list.csv"
 
+// Test
 
 studiengaenge = []
 
