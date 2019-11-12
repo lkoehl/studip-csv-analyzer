@@ -3,9 +3,20 @@ import csv
 DELIMITER = ";"
 FILE = "list.csv"
 
-// Test
 
 studiengaenge = []
+students = []
+
+
+class Student:
+    def __init__(self, name, surname, id, login):
+        self.name = name
+        self.surname = surname
+        self.id = id
+        self.login = login
+
+    def get_name(self):
+        return self.name
 
 
 def init_studiengaenge():
@@ -19,18 +30,21 @@ def init_studiengaenge():
             else:
                 result[stripped_studiengang] = 1
 
-    print(sorted(result.items(), key = lambda kv:(kv[1], kv[0]), reverse=True))
-
+    print(sorted(result.items(), key=lambda kv: (kv[1], kv[0]), reverse=True))
 
 
 def iterate_file():
     with open(FILE, mode='r')as csv_file:
         csv_reader = csv.DictReader(csv_file, delimiter=DELIMITER)
-        line_count = 0
         for row in csv_reader:
             studiengaenge.append(row["Studiengänge"])
-            line_count += 1;
-    init_studiengaenge()
+
+            name = row["Vorname"]
+            surname = row["Nachname"]
+            id = row["Nutzernamen"]
+            login = row["Anmeldedatum"]
+            student = Student(name, surname, id, login)
+            students.append(student)
 
 
 iterate_file()
