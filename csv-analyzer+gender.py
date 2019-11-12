@@ -11,9 +11,9 @@ FILE = "list.csv"
 
 
 
-def init_studiengaenge(studiengaenge):
+def init_studiengaenge(studiengaengeM):
     result = {}
-    for studiengang in studiengaenge:
+    for studiengang in studiengaengeM:
         splitted_studiengang = studiengang.split(DELIMITER)
         for single_studiengang in splitted_studiengang:
             stripped_studiengang = single_studiengang.split(",")[0].strip()
@@ -37,15 +37,21 @@ def init_studiengaenge(studiengaenge):
 
 
 def iterate_file():
-    studiengaenge = []
+    studiengaengeM = []
+    studiengaengeAll = []
     with open(FILE, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file, delimiter=DELIMITER)
         line_count = 0
         for row in csv_reader:
-            studiengaenge.append(row["Studiengänge"])
+            if(row["Geschlecht"] == "m"):
+                studiengaengeM.append(row["Studiengänge"])
+                line_count += 1
+            studiengaengeAll.append(row["Studiengänge"])
             line_count += 1
             
-    init_studiengaenge(studiengaenge)
+    test = []
+    init_studiengaenge(studiengaengeAll)
+    init_studiengaenge(studiengaengeM)
 
     plt.show()
 
