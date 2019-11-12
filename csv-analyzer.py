@@ -22,6 +22,15 @@ class Student:
     def get_name(self):
         return self.name
 
+    def get_surname(self):
+        return self.surname
+
+    def get_id(self):
+        return self.id
+
+    def get_login(self):
+        return self.login
+
 
 def init_studiengaenge():
     result = {}
