@@ -1,4 +1,5 @@
 import csv
+import matplotlib.pyplot as plt
 
 DELIMITER = ";"
 FILE = "list.csv"
@@ -96,6 +97,18 @@ def read_file():
 
 read_file()
 
-
+data = {}
 for student in students:
-    print(student.get_areas())
+    semesters = student.get_semesters()
+    for semester in semesters:
+        if semester in data:
+            data[semester] = data[semester] +  1
+        else: 
+            data[semester] = 1
+print(data)
+data = sorted(data.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
+x, y = zip(*data)
+plt.bar(x, y)
+plt.xticks(rotation=90)
+plt.savefig("graph.png")
+
