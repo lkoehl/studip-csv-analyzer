@@ -2,13 +2,60 @@
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+import gender_guesser.detector as gender
 
 DELIMITER = ";"
 FILE = "list.csv"
 
 
 
+class Student:
+    def __init__(self, group, name, surname, id, login, courses):
+        self.group = group
+        self.name = name
+        self.surname = surname
+        self.id = id
+        self.login = login
+        self.courses = courses
 
+    def get_group(self):
+        return self.group
+
+    def get_name(self):
+        return self.name
+
+    def get_surname(self):
+        return self.surname
+
+    def get_id(self):
+        return self.id
+
+    def get_login(self):
+        return self.login
+
+    def get_courses(self):
+        return self.courses
+
+    def get_areas(self):
+        areas = []
+        for course in self.courses:
+            areas.append(course["area"])
+
+        return areas
+
+    def get_degree(self):
+        degrees = []
+        for course in self.courses:
+            degrees.append(course["degree"])
+
+        return degrees
+
+    def get_semesters(self):
+        semesters = []
+        for course in self.courses:
+            semesters.append(course["semester"])
+
+        return semesters
 
 
 def init_studiengaenge(studiengaengeM):
@@ -43,11 +90,18 @@ def iterate_file():
         csv_reader = csv.DictReader(csv_file, delimiter=DELIMITER)
         line_count = 0
         for row in csv_reader:
-            if(row["Geschlecht"] == "m"):
-                studiengaengeM.append(row["Studiengänge"])
-                line_count += 1
-            studiengaengeAll.append(row["Studiengänge"])
-            line_count += 1
+            if(row["Anrede"] == "Herr"):
+                studiengaengeM.append(row["Studiengänge"]) 
+                studiengaengeAll.append(row["Studiengänge"]) 
+            if(row["Anrede"] == "Frau"):
+                studiengaengeAll.append(row["Studiengänge"])
+
+            #if(d.get_gender(row["Vorname"]) == "male" or d.get_gender(row["Vorname"]) == "mostly_male"):
+            #    studiengaengeM.append(row["Studiengänge"]) 
+            #    studiengaengeAll.append(row["Studiengänge"]) 
+            #if (d.get_gender(row["Vorname"]) == "female" or d.get_gender(row["Vorname"]) == "mostly_female"):
+            #    studiengaengeAll.append(row["Studiengänge"])
+                
             
     test = []
     init_studiengaenge(studiengaengeAll)
