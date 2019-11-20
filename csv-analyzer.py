@@ -109,8 +109,10 @@ def read_all_students(file):
             surname = row["Nachname"]
             if row["Anrede"] == "Herr":
                 gender = "male"
-            if row["Anrede"] == "Frau":
+            elif row["Anrede"] == "Frau":
                 gender = "female"
+            else:
+                gender = -1
             id = row["Nutzernamen"]
             login = row["Anmeldedatum"]
             courses = strip_courses(row["Studiengänge"])
@@ -142,7 +144,6 @@ read_all_groups(ALL_GROUPS_CC)
 data = {}
 dataM = {}
 dataF = {}
-dataA = {}
 
 ccmin = -1
 ccmax = -1
@@ -203,14 +204,18 @@ for student in all_students.values():
             else:
                 data[full_course] = student_life_value
 
-            if full_course in dataF and student_gender == "female":
-                dataF[full_course] = dataF[full_course] + student_life_value
-            elif full_course not in dataF and student_gender == "female":
-                dataF[full_course] = student_life_value
-            elif full_course in dataM and student_gender == "male":
-                dataM[full_course] = dataM[full_course] + student_life_value
-            elif full_course not in dataM and student_gender == "male":
-                dataM[full_course] = student_life_value
+            if student_gender == "female":
+                if full_course in dataF:
+                    dataF[full_course] = dataF[full_course] + \
+                        student_life_value
+                else:
+                    dataF[full_course] = student_life_value
+            elif student_gender == "male":
+                if full_course in dataM:
+                    dataM[full_course] = dataM[full_course] + \
+                        student_life_value
+                else:
+                    dataM[full_course] = student_life_value
 
 
 """for student in students:
@@ -225,12 +230,10 @@ for student in all_students.values():
 data = sorted(data.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
 dataF = sorted(dataF.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
 dataM = sorted(dataM.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
-dataA = sorted(dataA.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
 
 print(data)
 print(dataF)
 print(dataM)
-print(dataA)
 
 if data != []:
     x, y = zip(*data)
