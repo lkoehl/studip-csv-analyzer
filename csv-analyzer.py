@@ -1,6 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
-import gender_guesser.detector as gender
+import sqlite3
+from sqlite3 import Error
 
 DELIMITER = ";"
 FILE = "list.csv"
@@ -12,7 +13,25 @@ ALL_GROUPS_CC = "all_groups_cc.csv"
 students = []
 all_students = {}
 
+database = r"pythonsqlite.db"
 
+
+def create_connection(db_file):
+    """ create a database connection to a SQLite database """
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+        print(sqlite3.version)
+    except Error as e:
+        print(e)
+    finally:
+        if conn:
+            conn.close()
+
+
+create_connection(database)
+
+"""
 class Student:
     def __init__(self, name, surname, gender, id, login, courses, group=-1, codingclass=-1):
         self.group = group
@@ -218,13 +237,13 @@ for student in all_students.values():
                     dataM[full_course] = student_life_value
 
 
-"""for student in students:
-    semesters = student.get_semesters()
-    for semester in semesters:
-        if semester in data:
-            data[semester] = data[semester] +  1
-        else: 
-            data[semester] = 1"""
+#for student in students:
+#    semesters = student.get_semesters()
+#    for semester in semesters:
+#        if semester in data:
+#            data[semester] = data[semester] +  1
+#        else: 
+#            data[semester] = 1
 
 
 data = sorted(data.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
@@ -248,3 +267,4 @@ plt.xticks(rotation=90)
 
 plt.savefig("graph.png")
 plt.show()
+"""
