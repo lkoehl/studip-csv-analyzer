@@ -13,74 +13,61 @@ ALL_GROUPS_CC = "all_groups_cc.csv"
 students = []
 all_students = {}
 
-database = r"pythonsqlite.db"
+database = r"studip_students.db"
 
 
-def create_connection(db_file):
-    """ create a database connection to a SQLite database """
+def connect_to(db_file):
     conn = None
     try:
         conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
+        print("Connection established. Using sqlite3 version:", sqlite3.version)
     except Error as e:
-        print(e)
+        print("No connection to database possible", e)
 
     return conn
 
 
-def create_table(conn, create_table_sql):
-    """ create a table from the create_table_sql statement
-    :param conn: Connection object
-    :param create_table_sql: a CREATE TABLE statement
-    :return:
-    """
+def execute_sql(conn, sql):
     try:
         c = conn.cursor()
-        c.execute(create_table_sql)
+        c.execute(sql)
     except Error as e:
-        print(e)
+        print("Execution of sql not possible", e)
 
 
-sql_create_all_students_table = """ CREATE TABLE IF NOT EXISTS all_students (
-                                        student_id integer PRIMARY KEY,
-                                        user_name text NOT NULL,
-                                        mat_nr bigint,
-                                        first_name text NOT NULL,
-                                        last_name text NOT NULL,
-                                        gender text NOT NULL,
-                                        login_date text NOT NULL
-                                    ); """
-
-sql_create_groups_table = """ CREATE TABLE IF NOT EXISTS groups (
-                                        groups_id integer PRIMARY KEY,
-                                        user_name text NOT NULL,
-                                        group_nr integer NOT NULL,
-                                        codingclass_nr integer NOT NULL
-                                    ); """
-
-sql_create_courses_table = """ CREATE TABLE IF NOT EXISTS courses (
-                                        courses_id integer PRIMARY KEY,
-                                        user_name text NOT NULL,
-                                        first_area text NOT NULL,
-                                        first_degree text NOT NULL,
-                                        first_semester text NOT NULL,
-                                        second_area text,
-                                        second_degree text,
-                                        second_semester text
-                                    ); """
-
-
-conn = create_connection(database)
+conn = connect_to(database)
 
 if conn is not None:
     # create projects table
-    create_table(conn, sql_create_all_students_table)
+    execute_sql(conn, """ CREATE TABLE IF NOT EXISTS all_students (
+                                student_id integer PRIMARY KEY,
+                                user_name text NOT NULL,
+                                mat_nr bigint,
+                                first_name text NOT NULL,
+                                last_name text NOT NULL,
+                                gender text NOT NULL,
+                                login_date text NOT NULL
+                            ); """)
 
     # create tasks table
-    create_table(conn, sql_create_groups_table)
+    execute_sql(conn, """ CREATE TABLE IF NOT EXISTS groups (
+                                groups_id integer PRIMARY KEY,
+                                user_name text NOT NULL,
+                                group_nr integer NOT NULL,
+                                codingclass_nr integer NOT NULL
+                            ); """)
 
     # create courses table
-    create_table(conn, sql_create_courses_table)
+    execute_sql(conn, """ CREATE TABLE IF NOT EXISTS courses (
+                                courses_id integer PRIMARY KEY,
+                                user_name text NOT NULL,
+                                first_area text NOT NULL,
+                                first_degree text NOT NULL,
+                                first_semester text NOT NULL,
+                                second_area text,
+                                second_degree text,
+                                second_semester text
+                            ); """)
 else:
     print("Error! cannot create the database connection.")
 
